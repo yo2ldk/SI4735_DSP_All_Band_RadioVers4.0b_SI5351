@@ -4614,7 +4614,7 @@ void FreqDraw (float freq, int d)  {
       tft.drawString("MHz", saverX + 165, saverY + 38);
     } else {
       tft.setTextColor(TFT_YELLOW, TFT_NAVY);
-      tft.drawString("MHz", XFreqDispl + 215 + d, YFreqDispl + 60);
+      tft.drawString("MHz", XFreqDispl + 225 + d, YFreqDispl + 60);
     }
   } else {
     if (band[bandIdx].bandType == MW_BAND_TYPE || band[bandIdx].bandType == LW_BAND_TYPE) {
