@@ -868,7 +868,7 @@ typedef struct // MemoBank data
   uint8_t         band;
   char            Name[21];
 } MemoryBank;
-MemoryBank MemoBank[75];                                                     // 75 slots for Memory Station
+MemoryBank MemoBank[75];                                                     
 const int lastMemoBank = (sizeof MemoBank / sizeof(MemoryBank)) - 1;
 Preset preset [lastMemory + lastMemoBank + 1];
 
@@ -904,7 +904,7 @@ void IRAM_ATTR RotaryEncFreq() {
   if (!writingEeprom) {
     encoderStatus = encoder.process();
     if (encoderStatus) {
-      if (encoderStatus == DIR_CW) encoderCount = 1; else encoderCount = -1;          // Direction clockwise
+      if (encoderStatus == DIR_CW) encoderCount = 1; else encoderCount = -1;          
     }
   }
 }
@@ -1000,7 +1000,7 @@ btn.onPress(pressHandler)
   }
   //si5351wire.set_freq(1000000000UL, CLK_Xtal); // used for calibrating 10MHz
   si5351wire.set_correction(0, SI5351wire_PLL_INPUT_XO);
-  //si5351wire.set_correction(26613UL, SI5351wire_PLL_INPUT_XO);  // Calibration example with 10 MHz replace 26613UL with your figure.
+  //si5351wire.set_correction(26613UL, SI5351wire_PLL_INPUT_XO);  
   si5351wire.set_freq(FreqSI5351, CLK_Xtal);
 #endif
 
@@ -1241,8 +1241,8 @@ btn.onPress(pressHandler)
   si5351wire.set_freq(FreqSI5351, CLK_Xtal);
   si4735.setRefClock(32768);
   si4735.setRefClockPrescaler(1);   // will work with 32768 Hz
-  if (bandIdx == 0)  si4735.setup(RESET_PIN, -1, POWER_UP_FM, SI473X_ANALOG_AUDIO, XOSCEN_RCLK); // Start in FM
-  else si4735.setup(RESET_PIN, -1, POWER_UP_AM, SI473X_ANALOG_AUDIO, XOSCEN_RCLK); // Start in AM
+  if (bandIdx == 0)  si4735.setup(RESET_PIN, -1, POWER_UP_FM, SI473X_ANALOG_AUDIO, XOSCEN_RCLK); 
+  else si4735.setup(RESET_PIN, -1, POWER_UP_AM, SI473X_ANALOG_AUDIO, XOSCEN_RCLK); 
   if (bandIdx != 0) si4735.setAM();
 #endif
 
@@ -1685,20 +1685,22 @@ void Battery() { //battery info
     int colorBatt = TFT_WHITE;
     if (bat < 15) colorBatt = TFT_ORANGE;
     if (bat < 5) colorBatt = 64528;
-    tft.drawRect(XVolInd + 175, YVolInd + 4, 48, 18, colorBatt);
-    tft.drawRect(XVolInd + 224, YVolInd + 8, 2, 10, colorBatt);
+    tft.drawRect(XVolInd + 392, YVolInd - 60, 58, 20, colorBatt);            
+    tft.drawRect(XVolInd + 449, YVolInd - 56, 4, 12, colorBatt);            
     tftRusSetFont(T1012_T);
     tftRusSetSize(1);
     tftRusSetColor(TFT_WHITE, TFT_NAVY);
     tftRusSetDatum(BC_T);
     tftRusSetStyle(NRG_T);
     if (batVolt) {
-      tftRusPrint(String(vsupply, 2) + "V", XVolInd + 199, YVolInd + 19);
+      tftRusPrint(String(vsupply, 3) + "V", XVolInd + 424, YVolInd - 45);   
     } else {
-      int tmp = (46 - tftRusTextWidth(String(bat) + "%")) / 2;
-      tft.fillRect(XVolInd + 176, YVolInd + 5, tmp, 16, TFT_NAVY);
-      tft.fillRect(XVolInd + 221 - tmp, YVolInd + 5, tmp, 16, TFT_NAVY);
-      tftRusPrint(String(bat) + "%", XVolInd + 199, YVolInd + 19);
+      int tmp = (48 - tftRusTextWidth(String(bat) + "%")) / 2;
+      tft.fillRect(XVolInd + 401, YVolInd - 59, tmp, 15, TFT_NAVY);          
+      tft.fillRect(XVolInd + 446 - tmp, YVolInd - 59, tmp, 15, TFT_NAVY);     
+      //tftRusPrint(String(bat) + "%", XVolInd + 424, YVolInd - 45);        
+      tftRusPrint(String(vsupply, 3) + "V", XVolInd + 424, YVolInd - 45);
+    
     }
   }
   if ((elapsedBat + 10000) < millis()) {
@@ -1722,14 +1724,15 @@ void VolumeIndicator(int val) {
 //=======================================================================================
 void brightnessIndicator(int val) {
   //=======================================================================================
-  tft.setTextColor(TFT_YELLOW, TFT_GREY);
+   tft.setTextColor(TFT_YELLOW, TFT_GREY);
   tft.setTextSize(1);
-  tft.setCursor(XVolInd + 57, YVolInd + 3);
-  tft.print("BRIGHT");
+  tft.setCursor(350, 45);
+  tft.print(" BRIGHT");
   val = map(val, MinBrightness, MaxBrightness, 0, 128);
-  tft.fillRect(XVolInd + 15, YVolInd + 16 , (2 + val), 6, TFT_RED);
-  tft.fillRect(XVolInd + 17 + val, YVolInd + 16 , 130 - (2 + val), 6, TFT_NAVY);
+  tft.fillRect(307, 55 , (2 + val), 6, TFT_WHITE);                  
+  tft.fillRect(305 + val, 54 , 135 - (2 + val), 7, TFT_BLACK);   
 }
+
 //=======================================================================================
 void saver() {
   //=======================================================================================
@@ -1748,7 +1751,7 @@ void saver() {
     else if (currentMode == LSB || currentMode == USB || currentMode == CW) freq -= int(currentBFO / 1000);
   }
 //WAIT activity
-  while (((pressed == false) and (encoderCount == 0) and (encoderButton == 0) and (analogRead(ENCODER_SWITCH) > 500)) or (writingEeprom)) {  // wait loop
+  while (((pressed == false) and (encoderCount == 0) and (encoderButton == 0) and (analogRead(ENCODER_SWITCH) > 500)) or (writingEeprom)) {  
     pressed = tft.getTouch(&x, &y);
     if (saverOn) {
       int t = posSaver;
@@ -1898,7 +1901,7 @@ void loop() {
 
   // Pressed will be set true is there is a valid touch on the screen
 
-  while (((pressed == false) and (encoderCount == 0) and (encoderButton == 0) and (analogRead(ENCODER_SWITCH) > 500)) or (writingEeprom)) {  // wait loop
+  while (((pressed == false) and (encoderCount == 0) and (encoderButton == 0) and (analogRead(ENCODER_SWITCH) > 500)) or (writingEeprom)) {  
     pressed = tft.getTouch(&x, &y);
     if ((elapsedSaver + (saverTime * 60000)) < millis() and (saverOn or displayOff)) saver();
     showtimeRSSI();
@@ -2001,12 +2004,12 @@ void loop() {
       }
     }   
     MuteAud();
-//view(String(),0,230); //debuging
+
   }
   elapsedSaver = millis();
   
-  encoderCheck();        // Check if the encoder has moved.
-  encoderButtonCheck();  // Check if encoderbutton is pressed
+  encoderCheck();        
+  encoderButtonCheck();  
 
   boolean PRESoff = false;
   if (pressed) {
@@ -2040,7 +2043,7 @@ void loop() {
         x = y = 0;
       }
 // battery selection
-      if (( x > XVolInd + 161) and (x < XVolInd + 237) and (y > YVolInd - 1) and (y < YVolInd + 26)) {
+      if (( x > XVolInd + 386 ) and (x < XVolInd + 401) and (y > YVolInd - 60) and (y < YVolInd -66)) {
         Beep(1, 0);
         delay(200);
         batVolt = !batVolt;
@@ -2119,9 +2122,9 @@ void loop() {
 
           if (n == B_AGC) { //============================== AGC switch
             if  (AGCgain == 1) {
-              AGCgain = 0;                                  // disabled
+              AGCgain = 0;                                  
               drawButton(L_FIRST, B_AGC, B_NORMAL);
-            } else AGCgain = 1;                             //  enabled
+            } else AGCgain = 1;                             
             checkAGC();
             AGCfreqdisp();
           }
@@ -2803,7 +2806,7 @@ void loop() {
             drawListBut(L_BAND);
             delay(400);
             BroadBand = false;
-            if (bandIdx == 0 and currentAGCgain > 26) currentAGCgain = previousAGCgain = 26; // currentAGCgain in FM max. 26
+            if (bandIdx == 0 and currentAGCgain > 26) currentAGCgain = previousAGCgain = 26; 
             si4735.setAM();
             delay(50);
             currentBFO = band[bandIdx].lastBFO;
@@ -2820,7 +2823,7 @@ void loop() {
       }
 
       if (HamBand) {
-        if (CWShift == true)  {     // CW reset
+        if (CWShift == true)  {     
           currentBFO = currentBFO - 700;
           band[bandIdx].lastBFO = currentBFO;
           CWShift = false;
@@ -2972,13 +2975,16 @@ void loop() {
         }
         x = y = 0;
       }
-      if (( x > XVolInd + 161) and (x < XVolInd + 237) and (y > YVolInd - 1) and (y < YVolInd + 26)) {    // battery selection
+
+      // battery selection
+      if (( x > XVolInd + 386 ) and (x < XVolInd + 401) and (y > YVolInd - 60) and (y < YVolInd -66)) {  
+        
         Beep(1, 0);
         delay(200);
         batVolt = !batVolt;
         elapsedBat = 0;
       }
-      if (x < (150 + (bfoOn * 80)) and y > 25 and y < 60 and !VOLbut and !PRESbut) {    // PRE selection
+      if (x < (150 + (bfoOn * 80)) and y > 25 and y < 60 and !VOLbut and !PRESbut) {   
         Beep(1, 0);
         delay(200);
         if (PREtap) {
@@ -3397,8 +3403,8 @@ void checkAGC()  {
   si4735.getAutomaticGainControl();
   if (si4735.isAgcEnabled()) {
     if (AGCgain == 2) si4735.setAutomaticGainControl(1, currentAGCgain);
-    if (AGCgain == 0) si4735.setAutomaticGainControl(1, 0); // disabled
-  } else if (AGCgain == 1) si4735.setAutomaticGainControl(0, 0); // enabled
+    if (AGCgain == 0) si4735.setAutomaticGainControl(1, 0); 
+  } else if (AGCgain == 1) si4735.setAutomaticGainControl(0, 0); 
 }
 
 //=======================================================================================
@@ -3419,20 +3425,20 @@ void DisplayRDS()  {
   if (( currentMode == FM) and ((FirstLayer) or (ThirdLayer))) {
     if ( currentFrequency != previousFrequency ) {
       previousFrequency = currentFrequency;
-      tft.fillRect(XFreqDispl + 70, YFreqDispl + 60, 105, 19, TFT_NAVY);  // clear RDS text
-       tft.fillRect(0, 175, 480, 16, TFT_NAVY);// clear RDS rdsMsg prima riga
-       tft.fillRect(0, 191, 480, 16, TFT_NAVY);// clear RDS rdsMsg seconda riga
-   //   tft.fillRect(0, YFreqDispl + 59, 80, 20, TFT_NAVY);// clear RDS rdsTime
+      tft.fillRect(XFreqDispl + 70, YFreqDispl + 60, 105, 19, TFT_NAVY);  
+       tft.fillRect(0, 175, 480, 16, TFT_NAVY);
+       tft.fillRect(0, 191, 480, 16, TFT_NAVY);
+   //   tft.fillRect(0, YFreqDispl + 59, 80, 20, TFT_NAVY);
     }
     if ((RDS) and  (NewSNR >= 9) and !VOLbut and !AGCgainbut) checkRDS();
-    else tft.fillRect(XFreqDispl + 70, YFreqDispl + 60, 105, 19, TFT_NAVY); // clear RDS text
+    else tft.fillRect(XFreqDispl + 70, YFreqDispl + 60, 105, 19, TFT_NAVY);
   }
 }
 
 //=======================================================================================
 void showtimeRSSI() {
   //=======================================================================================
-  if ((millis() - elapsedRSSI) > MIN_ELAPSED_RSSI_TIME * RSSIfact) // 150 * 1  = 150 msec refresh time RSSI
+  if ((millis() - elapsedRSSI) > MIN_ELAPSED_RSSI_TIME * RSSIfact) 
   {
     si4735.getCurrentReceivedSignalQuality();
     NewRSSI = si4735.getCurrentRSSI();
@@ -3456,8 +3462,11 @@ void showRSSI() {
       tft.setTextSize(1);
       tft.setTextDatum(BC_DATUM);
       tft.setTextPadding(1);
-      tft.fillRect(0, 23 , 40, 18, TFT_VIOLET);     
-      tft.drawString(buffer, 21, 36);                                    
+      tft.fillRect(0, 23 , 40, 18, TFT_VIOLET);            
+      tft.drawString(buffer, 21, 36);                 
+//    if (si4735.getCurrentPilot() ? "STEREO":);
+//    tft.print (25, 60, "OO");
+//    else     tft.print (25, 60, "O");
     }
   }
   rssi = NewRSSI;
@@ -4171,8 +4180,8 @@ void DrawVolumeIndicator()  {
 //=======================================================================================
 void DrawBatteryIndicator()  {
   //=======================================================================================
-    tft.fillRect(XVolInd + 161, YVolInd - 1, 77, 28, TFT_GREY);
-  if (batShow) tft.fillRect(XVolInd + 176, YVolInd + 5, 46, 16, TFT_NAVY);
+    tft.fillRect(XVolInd + 382, YVolInd - 66, 79, 33, TFT_GREY);              
+  if (batShow) tft.fillRect(XVolInd + 400, YVolInd - 60, 50, 18, TFT_NAVY);    
 }
 
 //=======================================================================================
@@ -4339,10 +4348,10 @@ void showrdsMsg() {
     tft.setTextSize(2);
     tft.setTextColor(TFT_GREEN, TFT_NAVY);
     tft.setTextDatum(BC_DATUM);
-    tft.setCursor(40, 115);
-    tft.print("RDS News");    //  ⇩
+    tft.setCursor(40, 100);
+    tft.print("RDS News");  
   }
-  delay(175);
+  //delay(175);
 }
 
 // =====================================
@@ -4356,9 +4365,9 @@ if ((FirstLayer) or (ThirdLayer)) {
     tft.setTextSize(2);
     tft.setTextColor(TFT_GREEN, TFT_NAVY);
     tft.setTextDatum(BC_DATUM);
-    tft.setCursor(300, 115);
-    tft.print("RDS Time");    // ⏰
-      delay(175);
+    tft.setCursor(300, 100);
+    tft.print("RDS Time");      
+      //delay(175);
   }
  }
 
@@ -4614,7 +4623,7 @@ void FreqDraw (float freq, int d)  {
       tft.drawString("MHz", saverX + 165, saverY + 38);
     } else {
       tft.setTextColor(TFT_YELLOW, TFT_NAVY);
-      tft.drawString("MHz", XFreqDispl + 225 + d, YFreqDispl + 60);
+      tft.drawString("MHz", XFreqDispl + 223 + d, YFreqDispl + 60);           
     }
   } else {
     if (band[bandIdx].bandType == MW_BAND_TYPE || band[bandIdx].bandType == LW_BAND_TYPE) {
@@ -4651,7 +4660,7 @@ void FreqDraw (float freq, int d)  {
 */
 bool checkStopSeeking() {
   // Checks the touch and encoder
-  return (bool) encoderCount || tft.getTouch(&x, &y) || analogRead(ENCODER_SWITCH) < 500;   // returns true if the user rotates the encoder or touches on screen
+  return (bool) encoderCount || tft.getTouch(&x, &y) || analogRead(ENCODER_SWITCH) < 500;   
 }
 
 //=======================================================================================
@@ -5065,7 +5074,7 @@ void setFreq(float f) {
   //=======================================================================================
   posScanFreq = f;
   si4735.setFrequency(f);
-  if (currentMode == LSB or currentMode == USB or currentMode == CW) si4735.setAutomaticGainControl(1, 0);     //AGC disabled
+  if (currentMode == LSB or currentMode == USB or currentMode == CW) si4735.setAutomaticGainControl(1, 0);    
 }
 
 //=======================================================================================
@@ -5073,7 +5082,7 @@ void freqUp() {
   //=======================================================================================
   posScanFreq++;
   si4735.frequencyUp();
-  if (currentMode == LSB or currentMode == USB or currentMode == CW) si4735.setAutomaticGainControl(1, 0);     //AGC disabled
+  if (currentMode == LSB or currentMode == USB or currentMode == CW) si4735.setAutomaticGainControl(1, 0);   
 }
 
 //=======================================================================================
@@ -5267,24 +5276,24 @@ void drawRETROscale() {
   tftRusSetDatum(BC_T);
   tftRusSetStyle(NBL_T);
    
-  float tmp = 240 - (d / 2);                                                                                     //  160    1/2   rezolutie?
+  float tmp = 240 - (d / 2);                                                                                     
   float tmpMark = currentRetroScale * bandRetro[RETROband].mark;
   while (tmp >= tmpMark) tmp -= tmpMark;
   float freq = (Displayfreq - (trunc(Displayfreq / bandRetro[RETROband].mark) * bandRetro[RETROband].mark)) * currentRetroScale;
-  tft.fillRect(0, 138, 480 - d, 20, color);                                                                      //   pozitie banda pe care e scrisa frecv
+  tft.fillRect(0, 138, 480 - d, 20, color);                                                                     
   
   for (float i = tmp - freq - tmpMark; i < (480 - d + (tmpMark / 2)); i += tmpMark) {
-    freq = Displayfreq + ((i - 240 + (d / 2)) / currentRetroScale);                                              // cap de scala frecventa  240 ?
+    freq = Displayfreq + ((i - 240 + (d / 2)) / currentRetroScale);                                          
     if (freq > bandRetro[RETROband].maximumFreq or freq < bandRetro[RETROband].minimumFreq) {
-      for (int n = 0; n < (tmpMark / 2); n += 4) tft.fillRect(i + n, 138, 2, 21, TFT_NAVY);                     // 114 pozitie linii negre verticala ultimele 7 108 fm
+      for (int n = 0; n < (tmpMark / 2); n += 4) tft.fillRect(i + n, 138, 2, 21, TFT_NAVY);                    
     } else {
-      tftRusPrint(String(freq, 0), i, 155);                                                                      // pozitie verticala text frecv pe bara retro centrala
+      tftRusPrint(String(freq, 0), i, 155);                                                                     
     }
-    freq = Displayfreq + ((i + (tmpMark / 2) - 240 + (d / 2)) / currentRetroScale);                              // cap de scala frecventa
+    freq = Displayfreq + ((i + (tmpMark / 2) - 240 + (d / 2)) / currentRetroScale);                            
     if (freq > bandRetro[RETROband].maximumFreq or (freq + (bandRetro[RETROband].mark / 2)) < bandRetro[RETROband].minimumFreq) {
-      for (int n = 0; n < (tmpMark / 2); n += 4) tft.fillRect(i + n + (tmpMark / 2), 138, 2, 21, TFT_NAVY);     // 114 pozitie linii negre verticala primele 7 108 fm
+      for (int n = 0; n < (tmpMark / 2); n += 4) tft.fillRect(i + n + (tmpMark / 2), 138, 2, 21, TFT_NAVY);     
     } else {
-      tft.fillRect(i + (tmpMark / 2), 138, 4, 21, TFT_NAVY);                                                    //    markeri verticali intre frecv text bara mijloc        
+      tft.fillRect(i + (tmpMark / 2), 138, 4, 21, TFT_NAVY);                                                         
     }
   }
 //---------------------------------------------------------------------
@@ -5316,16 +5325,16 @@ void drawRETROscale() {
   tftRusBottomCut = true;
   for (int i = 0; i <= lastPreset; i++) {
     if (preset[i].presetIdx >= bandRetro[RETROband].minimumFreq and preset[i].presetIdx <= bandRetro[RETROband].maximumFreq) {
-      freq = (((preset[i].presetIdx) - Displayfreq) * currentRetroScale) + 240 - (d / 2);                                // 160    pozitie orizontala posturi active potrivire cu scala
+      freq = (((preset[i].presetIdx) - Displayfreq) * currentRetroScale) + 240 - (d / 2);                              
       int tmplen = tftRusLength(preset[i].PresetName) * 8;
-      if (freq > -20 and freq < tmplen + 540 - d) {                                                         //acoperire banda neagra denumire post anterior dreapta
-        tft.fillRect(freq - tmplen - 40, preset[i].presetPos - 3, tmplen + 60, 11, TFT_NAVY);               //acoperire banda neagra denumire post anterior stanga
+      if (freq > -20 and freq < tmplen + 540 - d) {                                                        
+        tft.fillRect(freq - tmplen - 40, preset[i].presetPos - 3, tmplen + 60, 11, TFT_NAVY);             
         if ((preset[i].presetIdx) == Displayfreq) {
           tftRusSetColor(TFT_WHITE, TFT_TRANS);
-          tft.fillRect(freq - 10, preset[i].presetPos, 20, 5, TFT_GREEN);  // lungime greosime led post activ  TFT_LIGTHYELLOW
+          tft.fillRect(freq - 10, preset[i].presetPos, 20, 5, TFT_GREEN);  
         } else {
           tftRusSetColor(TFT_SILVER, TFT_TRANS);
-          tft.fillRect(freq - 10, preset[i].presetPos, 20, 5, TFT_OLIVE);        // lungime greosime led post inactiv 
+          tft.fillRect(freq - 10, preset[i].presetPos, 20, 5, TFT_OLIVE);       
         }
         tftRusPrint(String(preset[i].PresetName), freq - 20, preset[i].presetPos + 9);
       }
@@ -5335,8 +5344,8 @@ void drawRETROscale() {
 //---------------------------------------------------------------------
 //draw red cursor retro -----------------------------------------------  
   for (int i = 0; i < 5; i++) {
-     tft.fillRect(240 - (d / 2), (i * 12) + 40, 4, 50, TFT_RED);           // POZITIE CURSOR scala ROSU vertical PTR POSTURI  240; pozitie centru; 40; pozitia de sus; 4; grosimea; lungimea
-    tft.fillRect(240 - (d / 2), (i * 12) + 160, 4, 54, TFT_RED);         //    158 -    + 128
+     tft.fillRect(240 - (d / 2), (i * 12) + 40, 4, 50, TFT_RED);          
+    tft.fillRect(240 - (d / 2), (i * 12) + 160, 4, 54, TFT_RED);         
   }
 //---------------------------------------------------------------------
 }
