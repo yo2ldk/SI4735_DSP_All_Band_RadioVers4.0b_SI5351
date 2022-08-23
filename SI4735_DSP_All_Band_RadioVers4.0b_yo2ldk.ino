@@ -3456,8 +3456,8 @@ void showRSSI() {
       tft.setTextSize(1);
       tft.setTextDatum(BC_DATUM);
       tft.setTextPadding(1);
-      tft.fillRect(XFreqDispl + 435, YFreqDispl + 180 , 38, 16, TFT_VIOLET);                   
-      tft.drawString(buffer, XFreqDispl + 455, YFreqDispl + 192);                           
+      tft.fillRect(0, 23 , 40, 18, TFT_VIOLET);     
+      tft.drawString(buffer, 21, 36);                                    
     }
   }
   rssi = NewRSSI;
@@ -4336,11 +4336,11 @@ void showrdsMsg() {
   if ((FirstLayer) or (ThirdLayer)) {
     tft.setCursor(0, 175); 
     tft.print(rdsMsg);
-     tft.setTextSize(2);
+    tft.setTextSize(2);
     tft.setTextColor(TFT_GREEN, TFT_NAVY);
-      tft.setTextDatum(BC_DATUM);
-    tft.setCursor(10, 150);
-      tft.print("RDS News:");
+    tft.setTextDatum(BC_DATUM);
+    tft.setCursor(40, 115);
+    tft.print("RDS News");    //  ⇩
   }
   delay(175);
 }
@@ -4357,7 +4357,7 @@ if ((FirstLayer) or (ThirdLayer)) {
     tft.setTextColor(TFT_GREEN, TFT_NAVY);
     tft.setTextDatum(BC_DATUM);
     tft.setCursor(300, 115);
-    tft.print("RDS Time");
+    tft.print("RDS Time");    // ⏰
       delay(175);
   }
  }
